@@ -235,7 +235,7 @@ function M.is_function(x)
 end
 --------------------------------------------------------------------------------
 function M.map(x, y)
-    -- call function on every element of a table
+    -- calls function on every element of a table
     M.is_table(x)
     M.is_function(y)
     local tbl = {}
