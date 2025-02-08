@@ -11,9 +11,12 @@ cd lua-light-wings
 ## Modules
 ### llw-core.lua
 
+```
 msg(x)
 -- console output, can handle tables
+```
 
+```
 is_any(x)
 is_function(x)
 is_boolean(x)
@@ -25,26 +28,35 @@ is_dictionary(x)
 is_path(x)
 is_url(x)
 is_email(x)
--- raising errors, in case the variable is not of the right type
+-- raises error, in case the variable is not of the right type
+```
 
+```
 globalize(x)
 -- loads content of a module to a global space
 is_dictionary(x)
+```
 
+```
 map(x, y)
 -- calls function on every element of a table
 is_table(x)
 is_function(y)
+```
 
+```
 filter(x, y)
 -- filters table elements based on predicate function
 is_table(x)
 is_function(y)
+```
 
+```
 reduce(x, y, var)
 -- reduces table to single value using accumulator function
 is_table(x)
 is_function(y)
+```
 
 
 ### llw-extended-lib.lua
