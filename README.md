@@ -4,6 +4,11 @@ Personal set of useful functions with beautiful syntax to extend Lua Language to
 ## Quickstart
 
 ```
+luarocks install lua-light-wings
+```
+or
+
+```
 git clone https://github.com/burij/lua-light-wings.git
 cd lua-light-wings
 ```
