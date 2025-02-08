@@ -2,7 +2,7 @@ package = "lua-light-wings"
 version = "dev-1"
 source = {
    url = "git://github.com/burij/lua-light-wings",
-   tag = "v0.0.1"
+   tag = "main"
 }
 description = {
    summary = "Personal set of useful functions with beautiful syntax to extend Lua Language",
