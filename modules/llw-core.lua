@@ -1,7 +1,7 @@
 local M = {}
 --------------------------------------------------------------------------------
 function M.msg(x)
-    -- prints any variable
+    -- -- console output, can handle tables
     if type(x) ~= "table" then
        print(x)
        return
