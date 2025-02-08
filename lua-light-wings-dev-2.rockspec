@@ -1,5 +1,5 @@
 package = "lua-light-wings"
-version = "dev-1"
+version = "dev-2"
 source = {
    url = "git://github.com/burij/lua-light-wings",
    tag = "main"
