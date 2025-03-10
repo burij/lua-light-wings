@@ -1,8 +1,8 @@
 package = "lua-light-wings"
-version = "0.1-0"
+version = "0.2-1"
 source = {
    url = "git://github.com/burij/lua-light-wings",
-   tag = "v.0.2.0"
+   tag = "v.0.2.1"
 }
 description = {
    summary = "Personal set of useful functions with beautiful syntax to extend Lua Language",
