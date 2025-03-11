@@ -1,9 +1,7 @@
-local function application()
-    msg(
-        "hello world!"
-    )
-end
+local conf = {}
 --------------------------------------------------------------------------------
+conf.debug_mode = true
+
 
 --------------------------------------------------------------------------------
-application()
+return conf

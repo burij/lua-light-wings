@@ -9,7 +9,7 @@ local M = function (module, source)
         "./modules/?.lua",
         custom_path .. "/?.lua",
         "./pkgs/share/lua/" .. version .. "/?.lua",
-        "./share/lua/" .. version .. "/?/init.lua",
+        "./pkgs/share/lua/" .. version .. "/?/init.lua",
         "/home/" .. user .. "/.luarocks/share/lua/" .. version .. "/?.lua",
         "/home/" .. user .. "/.luarocks/share/lua/" .. version .. "/?/init.lua",
     }
