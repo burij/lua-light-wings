@@ -69,7 +69,14 @@ Unsorted collection of helper functions, will not be documented, read the code t
 
 
 ### need.lua
-Drop-in replacement for 'require' function. Extends path-variables to find lua-modules in more locations. Able to download modules via luarocks (if installed) or via wget/curl.
+Drop-in replacement for 'require' function. Extends path-variables to find lua-modules in more locations. Able to download modules via luarocks (if installed) or via wget/curl (due potential security reasons of this feature, it's disabled by default. Check the source code  before enabling).
+
+
+```
+local need = require "need"
+local var = need(modulename, [module_name_on_luarocks / download_link])
+```
+
 
 
 # License
