@@ -14,7 +14,7 @@ cd lua-light-wings
 ```
 
 ## Modules
-### llw-core.lua
+### lua-light-wings.lua --core module
 
 ```
 msg(x)
@@ -64,8 +64,12 @@ is_function(y)
 ```
 
 
-### llw-extended-lib.lua
+### lua-light-wings-extra.lua
 Unsorted collection of helper functions, will not be documented, read the code to use.
+
+
+### need.lua
+Drop-in replacement for 'require' function. Extends path-variables to find lua-modules in more locations. Able to download modules via luarocks (if installed) or via wget/curl.
 
 
 # License
