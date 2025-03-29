@@ -4,9 +4,37 @@ let
   luaEnv = pkgs.lua.withPackages (ps: with ps; [
     luarocks
     luafilesystem
+    inspect
   ]);
 
-  myLuaApp = pkgs.stdenv.mkDerivation {
+  dependencies = with pkgs; [
+    wget
+    nixpkgs-fmt
+  ];
+
+  shell = pkgs.mkShell {
+    buildInputs = [ luaEnv dependencies ];
+    shellHook = ''
+      alias run='lua main.lua'
+
+      cp ${pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/burij/"
+          +"lua-light-wings/refs/heads/main/modules/need.lua";
+        sha256 = "sha256-w6ie/GiCiMywXgVmDg6WtUsTFa810DTGo1jAHV5pi/A=";
+      }} ./need.lua
+
+      cp ${pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/burij/"
+          +"lua-light-wings/refs/heads/main/modules/lua-light-wings.lua";
+        sha256 = "sha256-mRD1V0ERFi4gmE/VfAnd1ujoyoxlA0vCj9fJNSCtPkw=";
+      }} ./modules/lua-light-wings.lua
+
+      nixpkgs-fmt default.nix
+    '';
+  };
+
+
+  package = pkgs.stdenv.mkDerivation {
     pname = "app";
     version = "1.0.0";
 
@@ -14,23 +42,31 @@ let
 
     luaLightWings = pkgs.fetchurl {
       url = "https://github.com/burij/lua-light-wings/blob/v.0.2.2/modules/lua-light-wings.lua";
-      sha256 = "sha256-BU/0FxpmiffNkMC9z/K+/cICnOIRW+4bMTb0Z968Yg4=";
+      sha256 = "sha256-yxHvWYPxQoth9b0kh/xXF5E+Rghh/PieFApVtMKnTkQ=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
-    buildInputs = [ luaEnv ];
+    buildInputs = [ luaEnv dependencies ];
 
     installPhase = ''
       mkdir -p $out/bin
       mkdir -p $out/lib
-      cp -r . $out/lib/app
+      cp -r . $out/lib/$pname
       cp $luaLightWings $out/lib/app/lua-light-wings.lua
 
       makeWrapper ${luaEnv}/bin/luarocks $out/bin/luarocks
-      makeWrapper ${luaEnv}/bin/lua $out/bin/app \
-        --add-flags "$out/lib/app/main.lua" \
-        --set LUA_PATH "$out/lib/app/?.lua;$out/lib/app/?/init.lua" \
+      makeWrapper ${luaEnv}/bin/lua $out/bin/$pname \
+        --add-flags "$out/lib/$pname/main.lua" \
+        --set LUA_PATH "$out/lib/$pname/?.lua;$out/lib/$pname/?/init.lua" \
         --set LUA_CPATH "${luaEnv}/lib/lua/${luaEnv.lua.luaversion}/?.so"
+
+      # Additional custom wrapper
+      cat > $out/bin/$pname-extra <<EOF
+      #!${pkgs.stdenv.shell}
+      exec ${luaEnv}/bin/lua "$out/lib/$pname/main.lua"
+      EOF
+      chmod +x $out/bin/$pname-extra
+
     '';
 
     meta = with pkgs.lib; {
@@ -39,4 +75,4 @@ let
       platforms = platforms.all;
     };
   };
-in myLuaApp
+in shell
