@@ -63,7 +63,7 @@ let
       mkdir -p $out/bin
       mkdir -p $out/lib
       cp -r . $out/lib/$pname
-      cp $extraFile $out/lib/app/lua-light-wings.lua
+      cp $extraFile $out/lib/$pname/lua-light-wings.lua
 
       makeWrapper ${luaEnv}/bin/luarocks $out/bin/luarocks
       makeWrapper ${luaEnv}/bin/lua $out/bin/$pname \
