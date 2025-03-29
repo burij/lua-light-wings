@@ -42,6 +42,14 @@ let
 
     src = ./.;
 
+    # Template for remote source
+    # src = pkgs.fetchFromGitHub {
+    #   owner = "burij";
+    #   repo = "hpln";
+    #   rev = "0.2";
+    #   sha256 = "sha256-H+ns/5mkbKuSQQwQ6vaECTmveSBYBUMr6YRRKokFKck=";
+    # };
+
     extraFile = pkgs.fetchurl {
       url = "https://github.com/burij/lua-light-wings/blob/"
         + "v.0.2.2/modules/lua-light-wings.lua";
