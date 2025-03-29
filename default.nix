@@ -42,7 +42,7 @@ let
 
     src = ./.;
 
-    luaLightWings = pkgs.fetchurl {
+    extraFile = pkgs.fetchurl {
       url = "https://github.com/burij/lua-light-wings/blob/"
         + "v.0.2.2/modules/lua-light-wings.lua";
       sha256 = "sha256-yxHvWYPxQoth9b0kh/xXF5E+Rghh/PieFApVtMKnTkQ=";
@@ -55,7 +55,7 @@ let
       mkdir -p $out/bin
       mkdir -p $out/lib
       cp -r . $out/lib/$pname
-      cp $luaLightWings $out/lib/app/lua-light-wings.lua
+      cp $extraFile $out/lib/app/lua-light-wings.lua
 
       makeWrapper ${luaEnv}/bin/luarocks $out/bin/luarocks
       makeWrapper ${luaEnv}/bin/lua $out/bin/$pname \
@@ -78,4 +78,4 @@ let
       platforms = platforms.all;
     };
   };
-in package
+in shell
