@@ -1,7 +1,10 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  luaEnv = pkgs.lua.withPackages (ps: with ps; [
+  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-24.11";
+  pkgs = import nixpkgs { config = { }; overlays = [ ]; };
+
+  luaEnv = pkgs.lua5_4.withPackages (ps: with ps; [
     luarocks
     luafilesystem
     inspect
@@ -33,7 +36,6 @@ let
     '';
   };
 
-
   package = pkgs.stdenv.mkDerivation {
     pname = "app";
     version = "1.0.0";
@@ -41,7 +43,8 @@ let
     src = ./.;
 
     luaLightWings = pkgs.fetchurl {
-      url = "https://github.com/burij/lua-light-wings/blob/v.0.2.2/modules/lua-light-wings.lua";
+      url = "https://github.com/burij/lua-light-wings/blob/"
+        + "v.0.2.2/modules/lua-light-wings.lua";
       sha256 = "sha256-yxHvWYPxQoth9b0kh/xXF5E+Rghh/PieFApVtMKnTkQ=";
     };
 
@@ -75,4 +78,4 @@ let
       platforms = platforms.all;
     };
   };
-in shell
+in package
