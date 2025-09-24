@@ -6,7 +6,7 @@ conf.version = "Lua Light Wings, Version 0.3-dev"
 -- main was made more universal/portable
 -- tests moved to modules
 -- default.nix improoved
--- TODO integration of the need tool to core
+-- integration of the need tool to core
 -- TODO new functions in extra
 
 _G.debug_mode = conf.debug_mode or true
