@@ -30,7 +30,7 @@ let
       cp ${pkgs.fetchurl {
         url = "https://raw.githubusercontent.com/burij/"
           +"lua-light-wings/refs/heads/main/modules/lua-light-wings.lua";
-        sha256 = "sha256-mRD1V0ERFi4gmE/VfAnd1ujoyoxlA0vCj9fJNSCtPkw=";
+        sha256 = "sha256-3RBZDxmSOXNJ+rpBG/VmXSajTRsvVU2y8zKsxqDw4JA=";
       }} ./modules/lua-light-wings.lua
 
       nixpkgs-fmt default.nix
