@@ -8,6 +8,7 @@ conf.version = "Lua Light Wings, Version 0.3-dev"
 -- default.nix improoved
 -- integration of the need tool to core
 -- TODO new functions in extra
+-- TODO update readme
 
 _G.debug_mode = conf.debug_mode or true
 
