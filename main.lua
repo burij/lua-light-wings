@@ -1,12 +1,14 @@
-need = require "modules.need"
-local core = need "lua-light-wings" core.globalize(core)
-local conf = need "conf"
-if conf.debug_mode then dofile("tests.lua") end
---------------------------------------------------------------------------------
+local core = require "modules.lua-light-wings" core.globalize(core)
+local test = require "modules.tests"
+local conf = require "conf"
 
-local function application()
+conf.version = "Lua Light Wings, Version 0.3-dev"
+-- main was made more universal/portable
+-- tests moved to modules
+-- default.nix improoved
+-- TODO integration of the need tool to core
+-- TODO new functions in extra
 
-end
+_G.debug_mode = conf.debug_mode or true
 
---------------------------------------------------------------------------------
-application()
+if debug_mode then test.prestart(conf) end

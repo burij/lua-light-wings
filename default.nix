@@ -1,8 +1,11 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> { } }:
 
 let
-  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-24.11";
+  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-25.05";
   pkgs = import nixpkgs { config = { }; overlays = [ ]; };
+
+  appName = "lua-light-wings";
+  appVersion = "0.1";
 
   luaEnv = pkgs.lua5_4.withPackages (ps: with ps; [
     luarocks
@@ -19,12 +22,10 @@ let
     buildInputs = [ luaEnv dependencies ];
     shellHook = ''
       alias run='lua main.lua'
+      alias build='nix-build -A package'
+      alias make='rm result;git add .;build;git commit -m '
+      mkdir modules
 
-      cp ${pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/burij/"
-          +"lua-light-wings/refs/heads/main/modules/need.lua";
-        sha256 = "sha256-w6ie/GiCiMywXgVmDg6WtUsTFa810DTGo1jAHV5pi/A=";
-      }} ./need.lua
 
       cp ${pkgs.fetchurl {
         url = "https://raw.githubusercontent.com/burij/"
@@ -37,23 +38,22 @@ let
   };
 
   package = pkgs.stdenv.mkDerivation {
-    pname = "app";
-    version = "1.0.0";
+    pname = appName;
+    version = appVersion;
 
     src = ./.;
 
-    # Template for remote source
     # src = pkgs.fetchFromGitHub {
     #   owner = "burij";
-    #   repo = "hpln";
-    #   rev = "0.2";
-    #   sha256 = "sha256-H+ns/5mkbKuSQQwQ6vaECTmveSBYBUMr6YRRKokFKck=";
+    #   repo = appName;
+    #   rev = appVersion;
+    #   sha256 = "sha256-Z2iJotdJSXS3lg+O8sazqvNpfbfCUxH7dmcV9VwTU5M=";
     # };
 
     extraFile = pkgs.fetchurl {
-      url = "https://github.com/burij/lua-light-wings/blob/"
-        + "v.0.2.2/modules/lua-light-wings.lua";
-      sha256 = "sha256-yxHvWYPxQoth9b0kh/xXF5E+Rghh/PieFApVtMKnTkQ=";
+      url = "https://raw.githubusercontent.com/burij/"
+        + "lua-light-wings/refs/tags/v.0.2.2/modules/lua-light-wings.lua";
+      sha256 = "sha256-mRD1V0ERFi4gmE/VfAnd1ujoyoxlA0vCj9fJNSCtPkw=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -63,13 +63,15 @@ let
       mkdir -p $out/bin
       mkdir -p $out/lib
       cp -r . $out/lib/$pname
+      cp -r ./modules/* $out/lib/$pname/
       cp $extraFile $out/lib/$pname/lua-light-wings.lua
 
       makeWrapper ${luaEnv}/bin/luarocks $out/bin/luarocks
       makeWrapper ${luaEnv}/bin/lua $out/bin/$pname \
         --add-flags "$out/lib/$pname/main.lua" \
-        --set LUA_PATH "$out/lib/$pname/?.lua;$out/lib/$pname/?/init.lua" \
-        --set LUA_CPATH "${luaEnv}/lib/lua/${luaEnv.lua.luaversion}/?.so"
+        --set LUA_PATH "$out/lib/$pname/?.lua;$out/lib/$pname/?/init.lua;" \
+        --set LUA_CPATH "${luaEnv}/lib/lua/${luaEnv.lua.luaversion}/?.so" \
+        --prefix PATH : ${pkgs.pandoc}/bin
 
       # Additional custom wrapper
       cat > $out/bin/$pname-extra <<EOF
@@ -86,4 +88,5 @@ let
       platforms = platforms.all;
     };
   };
-in shell
+in
+{ shell = shell; package = package; }
