@@ -7,7 +7,7 @@ conf.version = "Lua Light Wings, Version 0.3-dev"
 -- tests moved to modules
 -- default.nix improoved
 -- integration of the need tool to core
--- TODO new functions in extra
+-- new functions in extra
 -- TODO update readme
 -- TODO update rockspecs
 

@@ -1,6 +1,149 @@
-local M = require( "modules.llw-core" ) or {}
+local M = require( "modules.lua-light-wings" ) or {}
 --------------------------------------------------------------------------------
 -- https://lua-docs.vercel.app
+--------------------------------------------------------------------------------
+
+function M.dotted_line()
+    local x = ""
+    local y = "."
+    for i = 1, 80 do
+        x = x .. y
+    end
+    print(x)
+end
+
+--------------------------------------------------------------------------------
+
+function M.get_configuration(x)
+    is_path(x)
+    local config_loader = loadfile(x)
+    local output = config_loader()
+    return is_dictionary(output)
+end
+
+--------------------------------------------------------------------------------
+
+function M.map_arguments(command_line_argument)
+-- parses arguments from command line
+-- usage: local flags = utils.map_arguments(arg) --> flags.find("-h", "--help")
+    x = command_line_argument or _G.arg
+    local result, maping = {}, {}
+
+    for idx, text in ipairs(x) do
+        if text:find("=") then
+            local name, value = text:match("([^=]+)=(.+)")
+            value = value:match("[%s'\"]*([^'\"]*)") or value
+            maping[name] = {idx = idx, value = value}
+        else
+            maping[text] = {idx = idx, value = x[idx + 1]}
+        end
+    end
+
+    function result.empty()
+        return x[1] == nil
+    end
+
+    function result.find(arg, alt_arg)
+        return maping[arg] or maping[alt_arg or -1]
+    end
+
+    function result.value(arg, alt_arg)
+        return (result.find(arg, alt_arg) or {}).value
+    end
+
+    return result
+end
+
+--------------------------------------------------------------------------------
+
+function M.val_in_tbl(x, y)
+-- returns true, if value x is present in table y
+    is_string(x)
+    is_dictionary(y)
+    local output = false
+    for _, value in pairs(y) do
+        if value == x then
+            output = true
+        end
+    end
+    return is_boolean(output)
+end
+
+--------------------------------------------------------------------------------
+
+unction M.get_parent(folder)
+    local x = is_path(folder)
+    local result = nil
+
+    if not x or x == "" then result = nil
+    elseif x:match("^[/\\]+$") then result = "/"
+    elseif x:match("^%a:[/\\]*$") then
+        -- Handle Windows drive root (e.g., "C:" or "C:\")
+        local drive_letter = x:match("^(%a:)")
+        result = drive_letter .. "\\"
+    else
+        local clean_path = x:gsub("[/\\]+$", "")
+        if clean_path == "" then result = "/"
+        else
+            local parent = clean_path:match("^(.+)[/\\][^/\\]*$")
+            if not parent then result = "."
+            elseif parent == "" then result = "/"
+            else result = parent end
+        end
+    end
+    return is_path(result)
+end
+
+--------------------------------------------------------------------------------
+
+function M.process_template(template, variable_set)
+    local x = is_string(template)
+    local y = is_dictionary(variable_set)
+    local result = x
+    for k, v in pairs(y) do
+        if string.find(result, k, 1, true) then
+            result = string.gsub(result, k, v)
+        end
+    end
+    return is_string(result)
+end
+
+--------------------------------------------------------------------------------
+
+function M.file_exists(path)
+    local x = is_path(path)
+    local f = io.open(x, "r")
+    local result = false
+    if f ~= nil then
+        io.close(f)
+        result = true
+    end
+    return is_boolean(result)
+end
+
+--------------------------------------------------------------------------------
+
+function M.md_to_html(markdown)
+    local x = is_string(markdown or "")
+
+    local clean_md = string.gsub(x, "'", "'\"'\"'") -- escape single quotes
+    local pandoc_cmd = "echo '" .. clean_md .. "' | pandoc -f markdown -t html"
+    local handle = io.popen(pandoc_cmd)
+
+    local result = "Could not execute pandoc command"
+    if not handle then
+        return is_string(result)
+    end
+
+    local result = handle:read("*a")
+    local success = handle:close()
+    if not success then
+        result = "Pandoc conversion failed, Pandoc installed?"
+    end
+
+    return is_string(result)
+end
+
 --------------------------------------------------------------------------------
 
 function M.pick(x, y, z)
@@ -450,10 +593,10 @@ end
 
 --------------------------------------------------------------------------------
 
-function M.read_file(x)
+function M.read_file(path)
     -- returns content of given file
-    M.types( x, "string" ) -- path to file
-    local file = io.open(x, "r")
+    local x = is_string(path)
+    local file = io.open(path, "r")
     if file then
         content = file:read("*all")
         file:close()
