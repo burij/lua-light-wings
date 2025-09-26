@@ -71,7 +71,7 @@ end
 
 --------------------------------------------------------------------------------
 
-unction M.get_parent(folder)
+function M.get_parent(folder)
     local x = is_path(folder)
     local result = nil
 
