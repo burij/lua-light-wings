@@ -1,5 +1,38 @@
 local M = {}
 --------------------------------------------------------------------------------
+function M.case(...)
+    -- evaluates any amount of case tuples {condition, action}
+    -- if last argument is a function, it's treated like default case
+    -- usage: case( {a == b, delete_file}, {a < b, return_nil}, print_error )
+    local n = select('#', ...)
+    local cases_end_index = n
+    local default_action = nil
+    local last_arg = select(n, ...)
+
+
+    if type(last_arg) == "function" then
+        default_action = last_arg
+        cases_end_index = n - 1
+    end
+
+    for i = 1, cases_end_index do
+        local case_pair = select(i, ...)
+        if type(case_pair) ~= "table" or #case_pair < 2 then
+            error("Case argument #"
+                .. i
+                .. " is not a valid [condition, action] table.")
+        end
+        if case_pair[1] then
+            return case_pair[2]()
+        end
+    end
+
+    if default_action then
+        return default_action()
+    end
+end
+
+
 function M.need(module, source, autodownload)
     -- phase 1: extend paths, if not already done
     local version = _VERSION:match("%d+%.%d+")
