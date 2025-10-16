@@ -3,7 +3,8 @@ local test = require "modules.tests"
 local conf = require "conf"
 
 conf.version = "Lua Light Wings, Version 0.4-dev"
--- TODO core.case: replacement for if else statements
+-- core.case: replacement for if else statements
+-- TODO try to optimize case
 -- TODO core.pile: function composing
 -- TODO update documentation
 
