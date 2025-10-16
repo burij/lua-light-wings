@@ -20,6 +20,18 @@ function M.prestart(userconfig)
     ............................................................................
     ]])
 
+    M.case()
+
+end
+
+function M.case()
+    print "testing case function"
+    local result = case(
+        {false, true},
+        {false, function() print "das sollte erscheinen" end},
+        function() return true end
+    )
+    print(result)
 end
 
 

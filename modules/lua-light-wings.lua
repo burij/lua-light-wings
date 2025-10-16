@@ -20,15 +20,22 @@ function M.case(...)
         if type(case_pair) ~= "table" or #case_pair < 2 then
             error("Case argument #"
                 .. i
-                .. " is not a valid [condition, action] table.")
+                .. " is not a valid [condition, action] table."
+             )
         end
         if case_pair[1] then
-            return case_pair[2]()
+            if type(case_pair[2]) == "function" then
+                return case_pair[2]()
+            else return case_pair[2]
+            end
         end
     end
 
     if default_action then
-        return default_action()
+        if type(default_action) == "function" then
+            return default_action()
+        else return default_action
+        end
     end
 end
 
