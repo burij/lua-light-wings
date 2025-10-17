@@ -26,12 +26,42 @@ end
 
 function M.case()
     print "testing case function"
+
+    local function output(input)
+        output = input
+        return output
+    end
+
+    local a = 1
+    local b = 2
+    local c = 3
+
     local result = case(
-        {false, true},
-        {false, function() print "das sollte erscheinen" end},
-        function() return true end
-    )
-    print(result)
+        {true, "ok: 1 case, cond = boolean, act = string"}
+    ) msg(result)
+
+    local result = case(
+        {a < b, "ok: 1 case, cond = expression, act = string"}
+    ) msg(result)
+
+    local result = case{a < b, "ok: 1 case, no ()"}
+     msg(result)
+
+     local result = case (
+        {true, output("ok: 1 case, cond = boolean, act = call")}
+    ) msg(result)
+
+    local result = case(
+        {true, "ok: 2 cases, cond = boolean, act = string, 1st true"},
+        {false, output("you shouldn't see this")}
+    ) msg(result)
+
+    local result = case(
+        {a < b, output("ok: 1 case, cond = expression, act = call")}
+    ) msg(result)
+
+
+
 end
 
 
