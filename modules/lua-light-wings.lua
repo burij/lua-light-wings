@@ -1,44 +1,36 @@
 local M = {}
 --------------------------------------------------------------------------------
+
 function M.case(...)
-    -- evaluates any amount of case tuples {condition, action}
-    -- if last argument is a function, it's treated like default case
-    -- usage: case( {a == b, delete_file}, {a < b, return_nil}, print_error )
+    -- returns first passed value, aslong it is not a table with boolean or
+    -- expression, which evaluates to boolean as 1st item.
+    -- in that case 2nd item of that table will be return, if 1st item == true
+    -- functions are returned as calls
+    -- this function can be used as replacement for if-constructs
     local n = select('#', ...)
-    local cases_end_index = n
-    local default_action = nil
-    local last_arg = select(n, ...)
+    local x = select(1, ...)
 
-
-    if type(last_arg) == "function" then
-        default_action = last_arg
-        cases_end_index = n - 1
-    end
-
-    for i = 1, cases_end_index do
-        local case_pair = select(i, ...)
-        if type(case_pair) ~= "table" or #case_pair < 2 then
-            error("Case argument #"
-                .. i
-                .. " is not a valid [condition, action] table."
-             )
+    for i = 1, n do
+        local x = select(i, ...)
+        if type(x) == "function" then
+            return x()
         end
-        if case_pair[1] then
-            if type(case_pair[2]) == "function" then
-                return case_pair[2]()
-            else return case_pair[2]
+        if type(x) ~= "table" or type(x[1]) ~= "boolean" then
+            return x
+        end
+        if type(x) == "table" then
+            if x[1] == true then
+                if type(x[2]) == "function" then
+                    return x[2]()
+                end
+                if not x[2] then return x[1] end
+                return x[2]
             end
-        end
-    end
-
-    if default_action then
-        if type(default_action) == "function" then
-            return default_action()
-        else return default_action
         end
     end
 end
 
+--------------------------------------------------------------------------------
 
 function M.need(module, source, autodownload)
     -- phase 1: extend paths, if not already done

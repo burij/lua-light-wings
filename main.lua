@@ -4,8 +4,7 @@ local conf = require "conf"
 
 conf.version = "Lua Light Wings, Version 0.4-dev"
 -- core.case: replacement for if else statements
--- TODO try to optimize case
--- TODO core.pile: function composing
+-- TODO core.pipe: function composing
 -- TODO update documentation
 
 
