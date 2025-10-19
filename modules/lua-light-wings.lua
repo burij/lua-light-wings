@@ -4,11 +4,10 @@ local M = {}
 function M.case(...)
     -- returns first passed value, aslong it is not a table with boolean or
     -- expression, which evaluates to boolean as 1st item.
-    -- in that case 2nd item of that table will be return, if 1st item == true
+    -- in that case 2nd item of that table will be returned, if 1st item == true
     -- functions are returned as calls
-    -- this function can be used as replacement for if-constructs
+    -- can be used instead of if-else statements 
     local n = select('#', ...)
-    local x = select(1, ...)
 
     for i = 1, n do
         local x = select(i, ...)
