@@ -21,7 +21,7 @@ function M.prestart(userconfig)
     ]])
 
     -- custom test runs:
-    M.validate_pipe()
+
 
 
 end

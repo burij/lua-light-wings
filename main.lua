@@ -5,7 +5,7 @@ local conf = require "conf"
 conf.version = "Lua Light Wings, Version 0.4-dev"
 -- new function case: replacement for if else statements
 -- new function pipe: function composing
--- TODO update documentation
+-- updated documentation
 
 
 _G.debug_mode = conf.debug_mode or true
