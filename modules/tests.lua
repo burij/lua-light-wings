@@ -20,9 +20,14 @@ function M.prestart(userconfig)
     ............................................................................
     ]])
 
-    M.case()
+    -- custom test runs:
+    M.validate_pipe()
+
 
 end
+
+--------------------------------------------------------------------------------
+
 
 function M.case()
     print "testing case function"
@@ -87,5 +92,49 @@ function M.case()
     ) msg(result)
 end
 
+--------------------------------------------------------------------------------
+
+function M.pipe(...)
+    local args = {...}
+    local result, start_index
+
+    if type(args[1]) == "function" then
+        result = nil
+        start_index = 1
+    else
+        result = args[1]
+        start_index = 2
+    end
+
+    for i = start_index, #args do
+        result = args[i](result)
+    end
+    return result
+end
+
+--------------------------------------------------------------------------------
+
+function M.validate_pipe()
+    local pipe = M.pipe
+
+    pipe(1,
+        function(x) return x + 1 end,
+        function(x) print("1. ok, if " .. x .. " is 2") end
+    )
+
+    pipe(1,
+        function(x) return x * 2 end,
+        function(x) return x + 1 end,
+        function(x) print("2. ok, if " .. x .. " is 3") end
+    )
+
+    pipe(
+        function() return 5 end,
+        function(x) return x * 2 end,
+        function(x) print("3. ok, if " .. x .. " is 10") end
+    )
+end
+
+--------------------------------------------------------------------------------
 
 return M
