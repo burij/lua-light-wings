@@ -70,7 +70,7 @@ need(module, [module_name_on_luarocks / download_link], [autodownload])
 ```
 
 ```
-M.pipe(...)
+pipe(...)
 -- passes previous evaluation to the next function as argument
 
 Example usage:
@@ -89,7 +89,7 @@ Example usage:
 ```
 
 ```
-function M.case(...)
+case(...)
     -- returns first passed value, aslong it is not a table with boolean or expression, which evaluates to boolean as 1st item. In that case 2nd item of that table will be returned, if 1st item == true, functions are returned as calls
 
 Example usage:
