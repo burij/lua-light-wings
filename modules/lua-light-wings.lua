@@ -2,6 +2,7 @@ local M = {}
 --------------------------------------------------------------------------------
 
 function M.pipe(...)
+    -- passes previous evaluation to the next function as argument
     local args = {...}
     local result, start_index
 

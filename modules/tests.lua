@@ -92,47 +92,45 @@ function M.case()
     ) msg(result)
 end
 
---------------------------------------------------------------------------------
-
-function M.pipe(...)
-    local args = {...}
-    local result, start_index
-
-    if type(args[1]) == "function" then
-        result = nil
-        start_index = 1
-    else
-        result = args[1]
-        start_index = 2
-    end
-
-    for i = start_index, #args do
-        result = args[i](result)
-    end
-    return result
-end
 
 --------------------------------------------------------------------------------
 
 function M.validate_pipe()
-    local pipe = M.pipe
 
-    pipe(1,
-        function(x) return x + 1 end,
-        function(x) print("1. ok, if " .. x .. " is 2") end
-    )
+    local core = require("modules.lua-light-wings")
+    local pipe = core.pipe
 
-    pipe(1,
-        function(x) return x * 2 end,
-        function(x) return x + 1 end,
-        function(x) print("2. ok, if " .. x .. " is 3") end
+    pipe(
+        1,
+        function(x) return tostring(x + 1) end,
+        function(x) msg("1. ok, if result is 2. result: " .. x) end
     )
 
     pipe(
-        function() return 5 end,
-        function(x) return x * 2 end,
-        function(x) print("3. ok, if " .. x .. " is 10") end
+        function(x) return tostring(3 + 3) end,
+        function(x) msg("2. ok, if result is 6. result: " .. x) end
     )
+
+    local function add(x)
+        return x + 5
+    end
+
+    pipe(
+        5,
+        add,
+        function(x) return msg("3. ok, if result is 10. result: " .. x) end
+    )
+
+    local result = pipe(
+        function(x) return tostring(7 + 7) end
+    ) msg("4. ok, if result is 14. result: " .. result)
+
+    pipe(
+        2 + 2,
+        function(x) return tostring(x + 4) end,
+        function(x) msg("5. ok, if result is 8. result: " .. x) end
+    )
+
 end
 
 --------------------------------------------------------------------------------
