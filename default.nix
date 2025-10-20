@@ -52,8 +52,8 @@ let
 
     extraFile = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/burij/"
-        + "lua-light-wings/refs/tags/v.0.3.1/modules/lua-light-wings.lua";
-      sha256 = "sha256-3RBZDxmSOXNJ+rpBG/VmXSajTRsvVU2y8zKsxqDw4JA=";
+        + "lua-light-wings/refs/tags/v.0.4/modules/lua-light-wings.lua";
+      sha256 = "sha256-Tczj+XNIobX64Cncm0/rbDwMizUDhRmeyjFwrJrDCco=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];

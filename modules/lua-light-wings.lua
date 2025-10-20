@@ -1,6 +1,27 @@
 local M = {}
 --------------------------------------------------------------------------------
 
+function M.pipe(...)
+    -- passes previous evaluation to the next function as argument
+    local args = {...}
+    local result, start_index
+
+    if type(args[1]) == "function" then
+        result = nil
+        start_index = 1
+    else
+        result = args[1]
+        start_index = 2
+    end
+
+    for i = start_index, #args do
+        result = args[i](result)
+    end
+    return result
+end
+
+--------------------------------------------------------------------------------
+
 function M.case(...)
     -- returns first passed value, aslong it is not a table with boolean or
     -- expression, which evaluates to boolean as 1st item.
